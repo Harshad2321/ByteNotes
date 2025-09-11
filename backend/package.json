@@ -1,0 +1,28 @@
+{
+  "name": "study-buddy-backend",
+  "version": "1.0.0",
+  "description": "Backend API for StudyBuddy - AI-powered document analysis",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build step required for Node.js'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.0",
+    "node-fetch": "^3.3.2",
+    "pdf-parse": "^1.1.1",
+    "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["hackathon", "ai", "pdf", "express", "nodejs"],
+  "author": "Your Name",
+  "license": "MIT"
+}

@@ -1,8 +1,9 @@
 {
-  "name": "bytenotes",
+  "name": "studybuddy-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "homepage": "https://harshad2321.github.io/ByteNotes/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

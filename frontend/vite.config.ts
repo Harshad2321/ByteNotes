@@ -4,6 +4,7 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
+      base: '/ByteNotes/', // GitHub repository name
       server: {
         port: 5173,
         proxy: {

@@ -1,7 +1,7 @@
 {
-  "name": "study-buddy-backend",
+  "name": "bytenotes-backend",
   "version": "1.0.0",
-  "description": "Backend API for StudyBuddy - AI-powered document analysis",
+  "description": "Backend API for ByteNotes - AI-powered document analysis",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "keywords": ["hackathon", "ai", "pdf", "express", "nodejs"],
-  "author": "Your Name",
+  "keywords": ["ai", "pdf", "document-analysis", "express", "nodejs", "react"],
+  "author": "Harshad Pariyani",
   "license": "MIT"
 }

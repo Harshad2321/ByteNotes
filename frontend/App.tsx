@@ -5,7 +5,6 @@ import DashboardPage from './components/DashboardPage';
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
-  // Check if we're on GitHub Pages
   const isGitHubPages = window.location.hostname.includes('github.io');
 
   const handleLogin = () => {
@@ -21,7 +20,7 @@ const App: React.FC = () => {
       {/* Demo Banner for GitHub Pages */}
       {isGitHubPages && (
         <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2 px-4 text-sm">
-          🚀 <strong>StudyBuddy Demo</strong> - This is a live demo running on GitHub Pages! 
+          <strong>ByteNotes Demo</strong> - This is a live demo running on GitHub Pages! 
           <span className="ml-2">Try uploading a PDF and asking questions!</span>
         </div>
       )}

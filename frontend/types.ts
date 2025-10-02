@@ -5,8 +5,8 @@ export interface UploadedFile {
   pages: number;
   size: string;
   date: string;
-  base64: string; // base64-encoded file content
-  type: string;   // MIME type
+  base64: string;
+  type: string;
 }
 
 export interface QuestionAnswer {
@@ -16,5 +16,3 @@ export interface QuestionAnswer {
   sourceFile: string;
   date: string;
 }
-
-// npm run dev

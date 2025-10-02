@@ -1,23 +1,21 @@
-// API service for communicating with the backend
+
 import { mockBackend } from './mockBackend';
 
-// TODO: Replace with your actual Railway backend URL after deployment
-const API_BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'https://REPLACE-WITH-YOUR-RAILWAY-URL.up.railway.app/api'
-  : 'http://localhost:5000/api';
 
-// Check if we're running on GitHub Pages (demo mode)
+const API_BASE_URL = 'http://localhost:5000/api';
+
+
 const isGitHubPages = window.location.hostname.includes('github.io');
 const isDemoMode = isGitHubPages || (window.location.hostname === 'localhost' && !window.location.port);
 
 console.log('Demo mode:', isDemoMode, 'GitHub Pages:', isGitHubPages);
 
-// Helper function to get auth token
+
 const getAuthToken = (): string | null => {
   return localStorage.getItem('authToken');
 };
 
-// Helper function to create headers with auth
+
 const createHeaders = (includeAuth: boolean = true): HeadersInit => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -33,11 +31,10 @@ const createHeaders = (includeAuth: boolean = true): HeadersInit => {
   return headers;
 };
 
-// API functions
+
 export const api = {
-  // Auth API
+
   login: async (email: string, password: string) => {
-    // Use mock backend for GitHub Pages demo
     if (isDemoMode) {
       return await mockBackend.login(email, password);
     }
@@ -55,7 +52,7 @@ export const api = {
 
     const data = await response.json();
     
-    // Store token in localStorage
+
     if (data.success && data.token) {
       localStorage.setItem('authToken', data.token);
     }
@@ -63,9 +60,8 @@ export const api = {
     return data;
   },
 
-  // File Upload API
+
   uploadFile: async (file: File) => {
-    // Use mock backend for GitHub Pages demo
     if (isDemoMode) {
       return await mockBackend.uploadFile(file);
     }
@@ -90,9 +86,8 @@ export const api = {
     return response.json();
   },
 
-  // Get uploaded files
+
   getFiles: async () => {
-    // Use mock backend for GitHub Pages demo
     if (isDemoMode) {
       return await mockBackend.getFiles();
     }
@@ -110,9 +105,8 @@ export const api = {
     return response.json();
   },
 
-  // AI Query API (with file ID)
+
   askAI: async (question: string, fileId?: number) => {
-    // Use mock backend for GitHub Pages demo
     if (isDemoMode) {
       return await mockBackend.askAI(question, fileId?.toString());
     }
@@ -131,9 +125,8 @@ export const api = {
     return response.json();
   },
 
-  // Legacy AI Query API (with base64 file)
+
   askAILegacy: async (question: string, file: { base64Content: string; mimeType: string }) => {
-    // Use mock backend for GitHub Pages demo
     if (isDemoMode) {
       return await mockBackend.askAI(question);
     }
@@ -155,12 +148,12 @@ export const api = {
   },
 };
 
-// Helper function to check if user is authenticated
+
 export const isAuthenticated = (): boolean => {
   return !!getAuthToken();
 };
 
-// Helper function to logout
+
 export const logout = (): void => {
   localStorage.removeItem('authToken');
 };

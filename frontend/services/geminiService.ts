@@ -9,7 +9,7 @@ export const askAI = async (question: string, files: UploadedFile[]): Promise<st
   const file = files[0];
   
   try {
-    // Use the legacy API endpoint for backward compatibility
+
     const result = await api.askAILegacy(question, {
       base64Content: file.base64,
       mimeType: file.type,

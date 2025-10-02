@@ -1,17 +1,37 @@
-# ByteNotes Backend (Hackathon)
+# ByteNotes Backend
+
+Express.js API server for ByteNotes application providing document upload, AI processing, and authentication services.
 
 ## Requirements
-- Node.js (v18+; Node v22 is fine)
+- Node.js 18+
 - npm
 
 ## Setup
-1. Copy files into backend/
-2. `npm install`
-3. Create `.env` (see .env.example). Set HF_API_KEY and JWT_SECRET.
-4. Create uploads folder (multer will also create it automatically):
-   `mkdir uploads`
-5. Start:
-   `npm start`
 
-## Test flow (curl)
-1. Login:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Create environment file (`.env`):
+   ```env
+   PORT=5000
+   JWT_SECRET=your_jwt_secret_here
+   HF_TOKEN=your_hugging_face_token_here
+   NODE_ENV=development
+   ```
+
+3. Create uploads directory:
+   ```bash
+   mkdir uploads
+   ```
+
+4. Start the server:
+   ```bash
+   npm start
+   ```
+
+## API Testing
+
+### Authentication
+Login endpoint:

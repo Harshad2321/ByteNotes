@@ -1,11 +1,11 @@
-// routes/auth.js
+
 import express from "express";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-// Simple hardcoded test user for hackathon
+
 const TEST_USER = { email: "test@test.com", password: "123456", name: "Test User" };
 
 router.post("/login", (req, res) => {
@@ -20,7 +20,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/me", (req, res) => {
-  // optional: auth middleware could be used; for quick check accept token header
+
   const auth = req.headers.authorization;
   if (!auth) return res.status(401).json({ error: "No token" });
   const token = auth.split(" ")[1];

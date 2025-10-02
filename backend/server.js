@@ -1,4 +1,4 @@
-// server.js
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -7,13 +7,12 @@ import multer from "multer";
 import fs from "fs";
 import { createRequire } from "module";
 
-// Create require function for ES modules
+
 const require = createRequire(import.meta.url);
 
 dotenv.config();
 const app = express();
 
-// ===== CORS Configuration =====
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
@@ -21,16 +20,14 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// ===== Dummy User (Hackathon style) =====
 const USER = { email: "test@test.com", password: "123456" };
 
-// ===== In-Memory File Store =====
 let files = [];
 
-// ===== Multer Config =====
+
 const upload = multer({ dest: "uploads/" });
 
-// ===== Auth Middleware =====
+
 function authMiddleware(req, res, next) {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "Unauthorized - No token provided" });
@@ -45,10 +42,10 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// ===== Root Route =====
+
 app.get("/", (req, res) => {
   res.json({ 
-    message: "StudyBuddy Backend API is running!",
+    message: "ByteNotes Backend API is running!",
     endpoints: [
       "POST /api/auth/login",
       "POST /api/files/upload", 
@@ -58,7 +55,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// ===== Auth Routes =====
+
 app.post("/api/auth/login", (req, res) => {
   try {
     const { email, password } = req.body;
@@ -84,7 +81,7 @@ app.post("/api/auth/login", (req, res) => {
   }
 });
 
-// ===== File Upload Routes =====
+
 app.post("/api/files/upload", authMiddleware, upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -93,7 +90,6 @@ app.post("/api/files/upload", authMiddleware, upload.single("file"), async (req,
 
     console.log("Processing uploaded file:", req.file.originalname);
 
-    // Use CommonJS require for pdf-parse
     const pdfParse = require('pdf-parse');
     
     const filePath = req.file.path;
@@ -111,7 +107,6 @@ app.post("/api/files/upload", authMiddleware, upload.single("file"), async (req,
     
     files.push(fileRecord);
     
-    // Clean up uploaded file
     fs.unlinkSync(filePath);
     
     console.log(`File processed successfully: ${pdfData.numpages} pages, ${pdfData.text.length} characters`);
@@ -132,7 +127,7 @@ app.post("/api/files/upload", authMiddleware, upload.single("file"), async (req,
   }
 });
 
-// ===== Get Files Route =====
+
 app.get("/api/files", authMiddleware, (req, res) => {
   try {
     const fileList = files.map(file => ({
@@ -154,7 +149,7 @@ app.get("/api/files", authMiddleware, (req, res) => {
   }
 });
 
-// ===== AI Routes =====
+
 app.post('/api/ai/ask', authMiddleware, async (req, res) => {
   try {
     const { question, fileId, file } = req.body;
@@ -165,17 +160,17 @@ app.post('/api/ai/ask', authMiddleware, async (req, res) => {
     
     let pdfText = '';
     
-    // Handle both file upload (base64) and file ID scenarios
+
     if (file && file.base64Content) {
       console.log("Processing direct file upload for AI query");
-      // Direct file upload scenario
+
       const pdfParse = require('pdf-parse');
       const pdfBuffer = Buffer.from(file.base64Content, 'base64');
       const pdfData = await pdfParse(pdfBuffer);
       pdfText = pdfData.text;
     } else if (fileId) {
       console.log("Using previously uploaded file:", fileId);
-      // File ID scenario
+
       const fileRecord = files.find(f => f.id === parseInt(fileId));
       if (!fileRecord) {
         return res.status(404).json({ error: 'File not found' });
@@ -187,7 +182,7 @@ app.post('/api/ai/ask', authMiddleware, async (req, res) => {
     
     console.log('PDF text extracted, length:', pdfText.length);
     
-    // Prepare the prompt with actual PDF content
+
     const prompt = `[INST] You are a helpful assistant that analyzes documents and answers questions about them.
 
 Document Content:
@@ -199,7 +194,7 @@ Please provide a detailed answer based on the document content above. [/INST]`;
 
     console.log('Calling Hugging Face API...');
     
-    // Call Hugging Face API with PDF content
+
     const response = await fetch(`https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1`, {
       method: 'POST',
       headers: {
@@ -244,7 +239,7 @@ Please provide a detailed answer based on the document content above. [/INST]`;
   }
 });
 
-// ===== Legacy endpoint for backward compatibility =====
+
 app.post('/api/ask', async (req, res) => {
   try {
     const { question, file } = req.body;
@@ -254,10 +249,10 @@ app.post('/api/ask', async (req, res) => {
     
     console.log("Legacy endpoint called with question:", question);
     
-    // Use CommonJS require for pdf-parse to avoid module issues
+
     const pdfParse = require('pdf-parse');
     
-    // Convert base64 to buffer and extract text from PDF
+
     const pdfBuffer = Buffer.from(file.base64Content, 'base64');
     console.log('PDF buffer created, size:', pdfBuffer.length);
     
@@ -267,7 +262,7 @@ app.post('/api/ask', async (req, res) => {
     console.log('PDF text extracted, length:', pdfText.length);
     console.log('PDF preview:', pdfText.substring(0, 200));
     
-    // Simple response for now - return the PDF content summary
+
     const summary = `Based on the PDF content, here's what I found:
 
 Content Length: ${pdfText.length} characters
@@ -287,17 +282,17 @@ This document appears to contain information about ${pdfText.includes('machine l
   }
 });
 
-// ===== Error Handling Middleware =====
+
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// ===== Start Server =====
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 StudyBuddy Backend running on http://localhost:${PORT}`);
-  console.log(`📋 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔑 HF Token configured: ${process.env.HF_TOKEN ? 'Yes' : 'No'}`);
-  console.log(`🔐 JWT Secret configured: ${process.env.JWT_SECRET ? 'Yes' : 'No'}`);
+  console.log(`ByteNotes Backend running on http://localhost:${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`HF Token configured: ${process.env.HF_TOKEN ? 'Yes' : 'No'}`);
+  console.log(`JWT Secret configured: ${process.env.JWT_SECRET ? 'Yes' : 'No'}`);
 });

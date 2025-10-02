@@ -43,7 +43,7 @@ const DashboardPage: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         const newFileEntry: UploadedFile = {
           id: Date.now(),
           name: newFile.name,
-          pages: Math.floor(Math.random() * 100) + 10, // Mock page count
+          pages: Math.floor(Math.random() * 100) + 10,
           size: `${(newFile.size / 1024 / 1024).toFixed(2)} MB`,
           date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
           base64,
